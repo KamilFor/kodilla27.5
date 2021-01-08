@@ -26,16 +26,28 @@ router.get('/:id', (req, res) => {
 
 // POST
 router.post('/', (req, res) => {
+  console.log(req.body);
   const newSeat = {
     id: uuid.v4(),
-    day: 4,
-    seat: 10,
-    client: 'Amanda',
-    email: 'amandabuziaczekCV@buziaczek.com.pl.ru',
+    day: req.body.day,
+    seat: req.body.seat,
+    client: req.body.client,
+    email: req.body.email,
   };
+  console.log(newSeat);
 
-  seats.push(newSeat);
-  res.json(seats);
+  if (
+    seats.some(() => {
+      if (newSeat.seat === seats.seat && newSeat.day === seats.day) return true;
+      else return false;
+    }) === true
+  )
+    res.status(400).json({ msg: 'Seats is already taken' });
+  else {
+    seats.push(newSeat);
+    res.json(seats);
+    console.log(seats);
+  }
 });
 
 // PUT
